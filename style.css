@@ -1,0 +1,37 @@
+.form-div{
+    border: 1px solid black;
+    padding:10px;
+    padding-bottom:20px;
+}
+.form-div{
+    margin:10% 500px;
+}
+input{
+    width:300px;
+    height: 30px;
+    margin-left: 20px;
+}
+#signup,#login{
+    width: 120px;
+    height: 30px;
+    margin-left: 20px;
+}
+
+#form-heading,#login-link{
+    margin-left: 20px;
+ 
+}
+
+#success_msg{
+    color:green;
+    text-align: center;
+    
+}
+#username_error,
+#email_error,
+#password_error {
+    color: red;
+    margin-left: 20px;
+    display: none;
+}
+
