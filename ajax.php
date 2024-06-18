@@ -6,6 +6,7 @@ require_once("lib.php");
 use Firebase\JWT\JWT;
 
 header('Content-Type:application/json');
+session_start();
 
 $data = json_decode(file_get_contents('php://input'), true);
 $action = $data['action'];
@@ -31,6 +32,8 @@ if ($action == 'signup' || $action == 'otp_verification') {
             $querry = "insert into  user(username,email,password,role,timecreated) values('$username','$email','$password','$role','$timecreated')";
             $subject='OTP for the registartion';
             $otp=rand(100000,999999);
+            $_SESSION['otp']=$otp;
+            $_SESSION['otp_exipration_time']=time()+180;
             $body="Your one time password for the account creation is  $otp, Please verify and do not share it with anyone.
             Thank You ";
             send_email($email,$subject,$body);
@@ -43,10 +46,11 @@ if ($action == 'signup' || $action == 'otp_verification') {
             }
         }
     }else{
-        global $otp;
+       
         $user_otp=$data['otp'];
-        if($user_otp==$otp){
+        if($user_otp==$_SESSION['otp']){
             $response = ['success' => true, 'msg' => 'Your account created successfully!'];  
+            unset($_SESSION['otp']);
         }else{
             $response = ['success' => false, 'msg' => 'Please enter correct OTP!','user_otp'=>$user_otp,'otp'=>$otp];  
         }

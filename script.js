@@ -84,12 +84,7 @@ window.addEventListener('load', () => {
                     form_div.append(otp_error);
                     form_div.append(otp_submit_btn);
 
-                    // setTimeout(() => {
-                    //     window.location.href = "http://localhost/jwt_authentication/login.php";
-                    // }, 3000)
-
-                    // const otp_submit_btn=document.getElementById('otp_submit_btn');
-                    // const otp_field=document.getElementById('otp_field');
+                    
                     otp_submit_btn.addEventListener('click', () => {
                         if (otp_field.value.length != 6) {
                             otp_error.style.display = "block";
@@ -103,11 +98,24 @@ window.addEventListener('load', () => {
                                     'Content-Type': 'application/json'
                                 },
                                 body: JSON.stringify(otp_data)
-
+                                
                             }).then(((res) => {
                                 return res.json();
                             })).then((response) => {
-                                console.log(response);
+                                if((response.status==true)){
+                                    form_div.innerHTML = '';
+                                    success_modal(response.msg);
+                                    otp_error.style.display = "none";
+                                    setTimeout(() => {
+                                        window.location.href = "http://localhost/jwt_authentication/login.php";
+                                    }, 3000)
+                                    
+                                }else{
+                                    otp_error.style.display = "block";
+                                    otp_error.innerHTML = response.msg;
+                                    
+                                }
+                                
                             })
                         }
                     })
