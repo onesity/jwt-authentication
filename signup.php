@@ -1,5 +1,7 @@
 <?php
 include('header.php');
+// require_once("lib.php");
+// send_email();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,6 +19,32 @@ include('header.php');
             color: red;
             margin-left: 20px;
             display: none;
+        }
+
+        #otp_field {
+
+            width: 300px;
+            height: 30px;
+            margin-left: 20px;
+            margin-top: 10px;
+
+        }
+
+        #otp_submit_btn {
+            width: 120px;
+            margin-left: 20px;
+            height: 30px;
+            margin-top: 30px;
+        }
+        #otp_msg{
+            color: green;
+            margin-left: 20px;
+        }
+        #otp_error{
+            display: none;
+            color: red;
+            margin-left: 20px;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -43,7 +71,7 @@ include('header.php');
             <a href="login.php"> Login</a>
         </form>
     </div>
-    <script type ='module' src="script.js"></script>
+    <script type='module' src="script.js"></script>
 </body>
 
 </html>
