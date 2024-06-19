@@ -68,13 +68,17 @@ window.addEventListener('load', () => {
                     const otp_submit_btn = document.createElement('button');
                     const otp_msg = document.createElement('h3');
                     const otp_error = document.createElement('h5');
+                    const resend_otp_btn = document.createElement('a');
 
                     otp_field.setAttribute('type', 'number');
                     otp_field.setAttribute('id', 'otp_field');
                     otp_field.setAttribute('placeholder', 'Enter OTP');
+
                     otp_submit_btn.setAttribute('id', 'otp_submit_btn');
                     otp_msg.setAttribute('id', 'otp_msg');
                     otp_error.setAttribute('id', 'otp_error');
+                    resend_otp_btn.setAttribute('id', 'resend_otp_btn');
+                    resend_otp_btn.innerHTML='Resend OTP'
                     otp_submit_btn.innerHTML = 'Submit';
                     otp_msg.innerText = response.msg;
 
@@ -83,6 +87,7 @@ window.addEventListener('load', () => {
                     form_div.append(otp_field);
                     form_div.append(otp_error);
                     form_div.append(otp_submit_btn);
+                    form_div.append(resend_otp_btn);
 
                     
                     otp_submit_btn.addEventListener('click', () => {
@@ -99,26 +104,40 @@ window.addEventListener('load', () => {
                                 },
                                 body: JSON.stringify(otp_data)
                                 
-                            }).then(((res) => {
+                            }).then((res) => {
                                 return res.json();
-                            })).then((response) => {
-                                if((response.status==true)){
-                                    form_div.innerHTML = '';
+                            }).then((response) => {
+                                if(response.success==true){
                                     success_modal(response.msg);
-                                    otp_error.style.display = "none";
                                     setTimeout(() => {
                                         window.location.href = "http://localhost/jwt_authentication/login.php";
                                     }, 3000)
                                     
                                 }else{
                                     otp_error.style.display = "block";
-                                    otp_error.innerHTML = response.msg;
-                                    
+                                    otp_error.innerHTML = response.msg;  
                                 }
                                 
                             })
                         }
                     })
+                    resend_otp_btn.addEventListener('click',()=>{
+                        var resend_otp_data={action:'resend_otp'};
+                        fetch('http://localhost/jwt_authentication/ajax.php',{
+                            method: 'POST',
+                            header:{
+                                'Content-Type': 'application/JSON'
+                            },
+                            body:JSON.stringify(resend_otp_data)
+                        }).then((r)=>{
+                            return r.json();
+                        }).then((res)=>{
+                            if(res.success==true){
+                                otp_msg.innerText=res.msg;
+                            }
+                        })
+                    })
+
 
                 } else {
                     email_error.innerHTML = response.msg;

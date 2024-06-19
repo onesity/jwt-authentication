@@ -33,14 +33,27 @@ include('header.php');
             width: 305px;
             margin-left: 20px;
           padding-top: 12px;
-            display: none;
+          display: none;
             word-wrap: break-word;
         }
+        #forgot_password_link{
+            margin-left: 20px; 
+            cursor: pointer;
+            font-size: 15px;
+        }
+        #resend_password_link{
+            margin-left: 20px; 
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 15px;
+
+        }
+    
     </style>
 </head>
 
 <body>
-
+    
     <div class="form-div">
         <h2 id="form-heading">Login to your account</h2>
         <form action="" id="login_form">
@@ -52,6 +65,8 @@ include('header.php');
             <br><br>
             <input type="text" placeholder="password" name="password" id="password">
             <span id="password_error">password error</span>
+            <br><br>
+            <a href='#' id="forgot_password_link">Forgot Password</a>
             <br><br>
             <input type="button" id='login' value="Login">
             <br><br>

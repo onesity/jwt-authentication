@@ -30,22 +30,7 @@ include('header.php');
 
         }
 
-        #otp_submit_btn {
-            width: 120px;
-            margin-left: 20px;
-            height: 30px;
-            margin-top: 30px;
-        }
-        #otp_msg{
-            color: green;
-            margin-left: 20px;
-        }
-        #otp_error{
-            display: none;
-            color: red;
-            margin-left: 20px;
-            margin-top: 10px;
-        }
+   
     </style>
 </head>
 

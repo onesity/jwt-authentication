@@ -13,7 +13,7 @@ $action = $data['action'];
 
 if ($action == 'signup' || $action == 'otp_verification') {
     global $otp;
-    if($action=='signup'){
+    if ($action == 'signup') {
 
         $email = $data['email'];
         $password = $data['password'];
@@ -28,16 +28,18 @@ if ($action == 'signup' || $action == 'otp_verification') {
             $username = $data['username'];
             $timecreated = time();
             $role = 'user';
-            
-            $querry = "insert into  user(username,email,password,role,timecreated) values('$username','$email','$password','$role','$timecreated')";
-            $subject='OTP for the registartion';
-            $otp=rand(100000,999999);
-            $_SESSION['otp']=$otp;
-            $_SESSION['otp_exipration_time']=time()+180;
-            $body="Your one time password for the account creation is  $otp, Please verify and do not share it with anyone.
+            $confirmed = 0;
+
+            $querry = "insert into  user(username,email,password,role,confirmed,timecreated) values('$username','$email','$password','$role','$confirmed','$timecreated')";
+            $subject = 'OTP for the registartion';
+            $otp = rand(100000, 999999);
+            $_SESSION['email'] = $data['email'];
+            $_SESSION['otp'] = $otp;
+            $_SESSION['otp_exipration_time'] = time() + 180;
+            $body = "Your one time password for the account creation is  $otp, Please verify and do not share it with anyone.
             Thank You ";
-            send_email($email,$subject,$body);
-            
+            send_email($email, $subject, $body);
+
             $res = mysqli_query($conn, $querry);
             if ($res) {
                 $response = ['success' => true, 'msg' => "An OTP is sent to your email $email. Please verify it."];
@@ -45,14 +47,24 @@ if ($action == 'signup' || $action == 'otp_verification') {
                 $response = ['success' => false, 'msg' => 'Something went wrong,please try again later!'];
             }
         }
-    }else{
-       
-        $user_otp=$data['otp'];
-        if($user_otp==$_SESSION['otp']){
-            $response = ['success' => true, 'msg' => 'Your account created successfully!'];  
+    } else {
+        if (time() > $_SESSION['otp_exipration_time']) {
             unset($_SESSION['otp']);
-        }else{
-            $response = ['success' => false, 'msg' => 'Please enter correct OTP!','user_otp'=>$user_otp,'otp'=>$otp];  
+            unset($_SESSION['otp_exipration_time']);
+            $response = ['success' => false, 'msg' => 'OTP expired!'];
+        } else {
+            $user_email = $_SESSION['email'];
+            $user_otp = $data['otp'];
+            if ($user_otp == $_SESSION['otp']) {
+                $querry = "update user set confirmed=1 where email='$user_email'";
+                mysqli_query($conn, $querry);
+                unset($_SESSION['otp']);
+                unset($_SESSION['otp_exipration_time']);
+                unset($_SESSION['email']);
+                $response = ['success' => true, 'msg' => 'Your account created successfully!'];
+            } else {
+                $response = ['success' => false, 'msg' => 'Please enter correct OTP!'];
+            }
         }
     }
     echo json_encode($response);
@@ -67,7 +79,7 @@ if ($action == 'login') {
     $query = "select * from user where email='$email'";
     $res = mysqli_query($conn, $query);
     $user = mysqli_fetch_assoc($res);
-    
+
     if (mysqli_num_rows($res) != 0) {
         if ($password == $user['password']) {
             $secret_key = $config['jwt-secret'];
@@ -99,5 +111,57 @@ if ($action == 'login') {
     exit;
 }
 
+if ($action == 'resend_otp') {
+    unset($_SESSION['otp']);
+    unset($_SESSION['otp_exipration_time']);
+    $otp = rand(100000, 999999);
+    $_SESSION['otp'] = $otp;
+    $_SESSION['otp_exipration_time'] = time() + 180;
+    $email = $_SESSION['email'];
+    $subject = 'OTP for the registartion';
+    $body = "Your one time password for the account creation is  $otp, Please verify and do not share it with anyone.
+    Thank You ";
+    send_email($email, $subject, $body);
+    $response = ['success' => true, 'msg' => "An OTP is resent to your email $email. Please verify it."];
+    echo json_encode($response);
+    exit;
+}
 
-
+if ($action == 'reset_password') {
+    $email = $data['email'];
+    $_SESSION['email'] = $email;
+    $query = "select * from user where email='$email'";
+    $res = mysqli_query($conn, $query);
+    if (mysqli_num_rows($res) == 0) {
+        $response = ['success' => false, 'msg' => "Email not registered!"];
+    } else {
+        $otp = rand(100000, 999999);
+        $_SESSION['otp'] = $otp;
+        $_SESSION['otp_exipration_time'] = time() + 180;
+        $email = $_SESSION['email'];
+        $subject = 'One time password for password reset for your account.';
+        $body = "Your one time password for the password reset request is  $otp, Please verify and do not share it with anyone.
+        Thank You ";
+        send_email($email, $subject, $body);
+        $response = ['success' => true, 'msg' => "An OTP is sent to your email $email to reset your password. Please verify it."];
+    }
+    echo json_encode($response);
+    exit;
+}
+if ($action == 'verify_otp') {
+    $otp = $_SESSION['otp'];
+    $otp_expiration_time = $_SESSION['otp_exipration_time'];
+    if (time() > $otp_expiration_time) {
+        $response = ['success' => false, 'msg' => 'OTP is expired!'];
+    } else {
+        if ($otp == $data['otp']) {
+            unset($_SESSION['otp']);
+            unset($_SESSION['otp_exipration_time']);
+            $response = ['success' => true, 'msg' => 'OTP verified!'];
+        } else {
+            $response = ['success' => false, 'msg' => 'Incorrect OTP!'];
+        }
+    }
+    echo json_encode($response);
+    exit;
+}

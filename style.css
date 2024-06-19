@@ -11,7 +11,7 @@ input{
     height: 30px;
     margin-left: 20px;
 }
-#signup,#login{
+#signup,#login,#restet_password_btn{
     width: 120px;
     height: 30px;
     margin-left: 20px;
@@ -29,9 +29,37 @@ input{
 }
 #username_error,
 #email_error,
-#password_error {
+#password_error,#password_error1 {
     color: red;
     margin-left: 20px;
     display: none;
+}
+#otp_submit_btn {
+    width: 120px;
+    margin-left: 20px;
+    height: 30px;
+    margin-top: 30px;
+    cursor: pointer;
+}
+#otp_msg{
+    color: green;
+    margin-left: 20px;
+}
+#otp_error{
+    display: none;
+    color: red;
+    margin-left: 20px;
+    margin-top: 10px;
+}
+#resend_otp_btn{
+    width: 120px;
+    margin-left: 20px;
+    height: 30px;
+    margin-top: 30px;
+    cursor: pointer;
+    text-decoration: underline;
+    color: blue;
+    font-size: 10px;
+    
 }
 
