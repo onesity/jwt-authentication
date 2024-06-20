@@ -40,7 +40,7 @@ window.addEventListener('load', () => {
         if (Object.keys(errors).length == 0) {
             var data = { email: email.value, password: password.value, action: 'login' };
 
-            fetch('http://localhost/jwt_authentication/ajax.php', {
+            fetch('http://localhost/travel_booking_system/travel_booking_system/ajax.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -52,7 +52,7 @@ window.addEventListener('load', () => {
                 if (data.login == true) {
                     success_modal(data.msg);
                     setTimeout(() => {
-                        window.location.href = "http://localhost/jwt_authentication/index.php";
+                        window.location.href = "http://localhost/travel_booking_system/travel_booking_system/index.php";
                     }, 3000)
                 } else {
                     // login_msg.style.display = 'block';
@@ -79,7 +79,7 @@ window.addEventListener('load', () => {
             if (emailRes.status == true) {
                 var reset_password_data = { action: 'reset_password', email: email.value }
                 email_error.style.display = 'none';
-                fetch('http://localhost/jwt_authentication/ajax.php', {
+                fetch('http://localhost/travel_booking_system/travel_booking_system/ajax.php', {
                     method: 'POST',
                     headers: {
                         'Content-type': 'application/json'
@@ -122,7 +122,7 @@ window.addEventListener('load', () => {
                             } else {
                                 otp_error.style.display = "none";
                                 var otp_data = { action: 'verify_otp', otp: otp_field.value }
-                                fetch('http://localhost/jwt_authentication/ajax.php', {
+                                fetch('http://localhost/travel_booking_system/travel_booking_system/ajax.php', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json'
@@ -136,7 +136,7 @@ window.addEventListener('load', () => {
                                         form_div.innerHTML = '<h2 id="form-heading">Set New Password</h2><input type="text" placeholder="Enter new password" id="password"><br><span id="password_error">password error</span><br><br> <input type="text" placeholder="Enter agin password" id="password1"><br><span id="password_error1">password error</span><br><br><input type="button" id="restet_password_btn" value="Update Password"> <br><br><span id="login-link"></span><a href="login.php"> Back to login</a> / <a href="signup.php"> Signup</a>';
                                         // success_modal(response.msg);
                                         // setTimeout(() => {
-                                        //     window.location.href = "http://localhost/jwt_authentication/login.php";
+                                        //     window.location.href = "http://localhost/travel_booking_system/travel_booking_system/login.php";
                                         // }, 3000)
                                         const restet_password_btn = document.getElementById("restet_password_btn");
                                         const password = document.getElementById("password");
@@ -172,7 +172,7 @@ window.addEventListener('load', () => {
                                             }
                                             if (isPasswordMatched == true) {
                                                 var udatePasswordData = { action: 'upadte_password', password: password.value };
-                                                fetch('http://localhost/jwt_authentication/ajax.php', {
+                                                fetch('http://localhost/travel_booking_system/travel_booking_system/ajax.php', {
                                                     method: 'POST',
                                                     headers: {
                                                         'Content-Type': 'application/json'
@@ -184,7 +184,7 @@ window.addEventListener('load', () => {
                                                     if (response.success == true) {
                                                         success_modal(response.msg);
                                                         setTimeout(() => {
-                                                            window.location.href = "http://localhost/jwt_authentication/login.php";
+                                                            window.location.href = "http://localhost/travel_booking_system/travel_booking_system/login.php";
                                                         }, 5000)
 
                                                     }
@@ -202,7 +202,7 @@ window.addEventListener('load', () => {
                         })
                         resend_otp_btn.addEventListener('click', () => {
                             var resend_otp_data = { action: 'resend_otp' };
-                            fetch('http://localhost/jwt_authentication/ajax.php', {
+                            fetch('http://localhost/travel_booking_system/travel_booking_system/ajax.php', {
                                 method: 'POST',
                                 header: {
                                     'Content-Type': 'application/JSON'

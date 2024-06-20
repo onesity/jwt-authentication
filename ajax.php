@@ -168,20 +168,45 @@ if ($action == 'verify_otp') {
     exit;
 }
 
-if($action='upadte_password'){
+if($action=='upadte_password'){
+
     $email=$_SESSION['email'];
     $isOtpVerified=$_SESSION['is_otp_verified'];
-    $password=$data['password'];
     if($isOtpVerified==true ){
+        $password=$data['password'];
         $query="update user set password='$password' where email='$email'";
         $res=mysqli_query($conn,$query);
         if($res!=false){
+            unset($_SESSION['is_otp_verified']);
+            unset($_SESSION['email']);
+            unset($_SESSION['otp']);
+
             $response = ['success' => true, 'msg' => 'Password updated successfully!'];
         }else{
             $response = ['success' => false, 'msg' => 'Email is not found!'];
         }
     }else{
         $response = ['success' => false, 'msg' => 'Please verify OTP!'];
+    }
+    echo json_encode($response);
+    exit;
+}
+
+if($action=='create_category'){
+    $name=$data['category_name'];
+    $query="select * from category where name='$name'";
+    $res=mysqli_query($conn,$query);
+    if(mysqli_num_rows($res)!=0){
+        $response = ['success' => false, 'msg' => 'Catgory already exists!'];
+    }else{
+        $timecreated=time();
+        $status=1;
+        $new_query="insert into category(name,status,timecreated) values('$name','$status','$timecreated')";
+        if(mysqli_query($conn,$new_query)!=false){
+            $response = ['success' => true, 'msg' => 'Category created successfully!'];
+        }else{
+            $response = ['success' => false, 'msg' => 'Something went wrong!'];
+        }
     }
     echo json_encode($response);
     exit;
