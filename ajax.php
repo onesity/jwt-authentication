@@ -151,16 +151,37 @@ if ($action == 'reset_password') {
 if ($action == 'verify_otp') {
     $otp = $_SESSION['otp'];
     $otp_expiration_time = $_SESSION['otp_exipration_time'];
+    $_SESSION['is_otp_verified']=false;
     if (time() > $otp_expiration_time) {
         $response = ['success' => false, 'msg' => 'OTP is expired!'];
     } else {
         if ($otp == $data['otp']) {
             unset($_SESSION['otp']);
             unset($_SESSION['otp_exipration_time']);
+            $_SESSION['is_otp_verified']=true;
             $response = ['success' => true, 'msg' => 'OTP verified!'];
         } else {
             $response = ['success' => false, 'msg' => 'Incorrect OTP!'];
         }
+    }
+    echo json_encode($response);
+    exit;
+}
+
+if($action='upadte_password'){
+    $email=$_SESSION['email'];
+    $isOtpVerified=$_SESSION['is_otp_verified'];
+    $password=$data['password'];
+    if($isOtpVerified==true ){
+        $query="update user set password='$password' where email='$email'";
+        $res=mysqli_query($conn,$query);
+        if($res!=false){
+            $response = ['success' => true, 'msg' => 'Password updated successfully!'];
+        }else{
+            $response = ['success' => false, 'msg' => 'Email is not found!'];
+        }
+    }else{
+        $response = ['success' => false, 'msg' => 'Please verify OTP!'];
     }
     echo json_encode($response);
     exit;

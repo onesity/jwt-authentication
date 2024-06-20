@@ -57,10 +57,7 @@ window.addEventListener('load', () => {
                 } else {
                     // login_msg.style.display = 'block';
                     msg_div.style.display = 'block';
-
                     login_msg.innerHTML = data.msg;
-
-
                 }
             })
 
@@ -70,13 +67,13 @@ window.addEventListener('load', () => {
     })
     const form_div = document.querySelector('.form-div');
     forgot_password_link.addEventListener('click', () => {
-        form_div.innerHTML = '<h2 id="form-heading">Reset Password</h2><div id="msg_div"> <span id="login_msg">sdfs f sdfsd fsd fsdfsdf</span></div><input type="text" placeholder="email" name="email" id="email"><span id="email_error">email error</span><br><br><br><input type="button" id="restet_password_btn" value="Send OTP"> <br><br><span id="login-link"></span><a href="login.php"> Back to login</a> / <a href="signup.php"> Signup</a>';
+        form_div.innerHTML = '<h2 id="form-heading">Reset Password</h2><div id="msg_div"> <span id="login_msg">sdfs f sdfsd fsd fsdfsdf</span></div><input type="text" placeholder="email" name="email" id="email"><span id="email_error">email error</span><br><br><br><input type="button" id="send_otp_btn" value="Send OTP"> <br><br><span id="login-link"></span><a href="login.php"> Back to login</a> / <a href="signup.php"> Signup</a>';
 
         const email = document.getElementById('email');
         const email_error = document.getElementById('email_error');
-        const restet_password_btn = document.getElementById('restet_password_btn');
+        const send_otp_btn = document.getElementById('send_otp_btn');
 
-        restet_password_btn.addEventListener('click', () => {
+        send_otp_btn.addEventListener('click', () => {
             var emailRes = validateEmail(email.value)
 
             if (emailRes.status == true) {
@@ -141,25 +138,57 @@ window.addEventListener('load', () => {
                                         // setTimeout(() => {
                                         //     window.location.href = "http://localhost/jwt_authentication/login.php";
                                         // }, 3000)
-                                        const restet_password_btn=document.getElementById("restet_password_btn");
-                                        const password_error=document.getElementById("password_error");
-                                        const password=document.getElementById("password");
-                                        const password1=document.getElementById("password1");
-                                        restet_password_btn.addEventListener('click',()=>{
+                                        const restet_password_btn = document.getElementById("restet_password_btn");
+                                        const password = document.getElementById("password");
+                                        const password1 = document.getElementById("password1");
+                                        const password_error = document.getElementById("password_error");
+                                        const password_error1 = document.getElementById("password_error1");
+                                        restet_password_btn.addEventListener('click', () => {
+                                            var isPasswordMatched = false;
                                             var passswordRes = validatePassword(password.value);
                                             if (passswordRes.status == true) {
-                                                if(password==password1){
-                                                    password_error.style.display = 'none';
-                                                    password.style.border = '1px solid green';
-                                                }else{
-                                                    password_error.innerHTML = passswordRes.message;
-                                                    password.style.border = '1px solid red';
-                                                    password_error.style.display = 'block';
+                                                password_error.style.display = 'none';
+                                                if (password1.value.length != 0) {
+                                                    if (password.value == password1.value) {
+                                                        password_error1.style.display = 'none';
+                                                        password.style.border = '2px solid green';
+                                                        password1.style.border = '2px solid green';
+                                                        isPasswordMatched = true;
+                                                    } else {
+                                                        password_error1.style.display = 'block';
+                                                        password_error1.innerHTML = 'Both password not matched!';
+                                                        password.style.border = '1px solid red';
+                                                        password1.style.border = '1px solid red';
+
+                                                    }
+                                                } else {
+                                                    password_error1.style.display = 'block';
+                                                    password_error1.innerHTML = 'Please again enter password';
                                                 }
                                             } else {
                                                 password_error.innerHTML = passswordRes.message;
                                                 password.style.border = '1px solid red';
                                                 password_error.style.display = 'block';
+                                            }
+                                            if (isPasswordMatched == true) {
+                                                var udatePasswordData = { action: 'upadte_password', password: password.value };
+                                                fetch('http://localhost/jwt_authentication/ajax.php', {
+                                                    method: 'POST',
+                                                    headers: {
+                                                        'Content-Type': 'application/json'
+                                                    },
+                                                    body: JSON.stringify(udatePasswordData)
+                                                }).then((res) => {
+                                                    return res.json();
+                                                }).then((response) => {
+                                                    if (response.success == true) {
+                                                        success_modal(response.msg);
+                                                        setTimeout(() => {
+                                                            window.location.href = "http://localhost/jwt_authentication/login.php";
+                                                        }, 5000)
+
+                                                    }
+                                                })
                                             }
                                         })
 
