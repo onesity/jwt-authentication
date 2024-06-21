@@ -1,7 +1,7 @@
 <?php
 include('header.php');
 require_once('lib.php');
-sidenavbar();
+
 
 ?>
 <!DOCTYPE html>
@@ -74,23 +74,91 @@ sidenavbar();
 
         #catgory_heading,
         #create_category_btn {
-            margin-left: 10%;
+            /* margin-left: 2%; */
         }
 
         #catgory_heading {
             margin-top: 30px;
             margin-bottom: 30px;
         }
-     
+
+        .main-div {
+            display: flex;
+        }
+
+        .left-div {
+            width: auto;
+        }
+
+        .right-div {
+            width: 75%;
+            background-color: whitesmoke;
+            margin-left: 2%;
+
+        }
     </style>
 </head>
 
 <body>
-    <h2 id="catgory_heading">Categories </h2>
+    <div class="main-div">
+        <div class="left-div">
+            <?php
+            sidenavbar();
+            ?>
+        </div>
 
+        <div class="right-div">
+            <div class="container">
+                <h2 id="catgory_heading">Categories </h2>
+                <button type="button" class="btn btn-primary" id='create_category_btn' data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Create new category</button>
+                <table id="example" class="display" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Sr</th>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>Created At</th>
+                            <th>Updated At</th>
+                            <th> Action</th>
 
-    <button type="button" class="btn btn-primary" id='create_category_btn' data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Create new category</button>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $query = "select * from category order by id desc";
+                        $res = mysqli_query($conn, $query);
+                        $total_record = mysqli_num_rows($res);
+                        $sr = 1;
+                        while ($total_record != 0) {
+                            $record = mysqli_fetch_assoc($res);
+                            $category_name = $record['name'];
+                            $status = $record['status'];
+                            $timecreated = date('Y-m-d', $record['timecreated']);
+                            if ($record['timemodified'] == 0) {
+                                $timemodified = 'NA';
+                            } else {
+                                $timemodified = date('Y-m-d', $record['timemodified']);
+                            }
+                            echo "<tr>
+                    <td>$sr</td>
+                    <td>$category_name</td>
+                    <td>$status</td>
+                    <td>$timecreated</td>
+                    <td>$timemodified</td>
+                    <td>Edit</td>
+                    </tr>";
+                            $total_record--;
+                            $sr++;
+                        }
+                        ?>
 
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+    </div>
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -114,51 +182,6 @@ sidenavbar();
                 </div>
             </div>
         </div>
-    </div>
-    <div class="container">
-        <table id="example" class="display" style="width:100%">
-            <thead>
-                <tr>
-                    <th>Sr</th>
-                    <th>Name</th>
-                    <th>Status</th>
-                    <th>Created At</th>
-                    <th>Updated At</th>
-                    <th> Action</th>
-
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                $query = "select * from category order by id desc";
-                $res = mysqli_query($conn, $query);
-                $total_record = mysqli_num_rows($res);
-                $sr = 1;
-                while ($total_record != 0) {
-                    $record = mysqli_fetch_assoc($res);
-                    $category_name = $record['name'];
-                    $status = $record['status'];
-                    $timecreated = date('Y-m-d', $record['timecreated']);
-                    if ($record['timemodified'] == 0) {
-                        $timemodified = 'NA';
-                    } else {
-                        $timemodified = date('Y-m-d', $record['timemodified']);
-                    }
-                    echo "<tr>
-                    <td>$sr</td>
-                    <td>$category_name</td>
-                    <td>$status</td>
-                    <td>$timecreated</td>
-                    <td>$timemodified</td>
-                    </tr>";
-                    $total_record--;
-                    $sr++;
-                }
-                ?>
-
-            </tbody>
-
-        </table>
     </div>
 
     <script>
@@ -196,8 +219,8 @@ sidenavbar();
                 }).then((res) => {
                     if (res.success == true) {
                         form_div.innerHTML = "<h2 id='success_msg'>" + res.msg + "</h2>";
-                       const success_msg=document.getElementById('success_msg');
-                       success_msg.style.margin='30px';
+                        const success_msg = document.getElementById('success_msg');
+                        success_msg.style.margin = '30px';
                         setTimeout(() => {
                             window.location.href = "http://localhost/travel_booking_system/travel_booking_system/category.php";
                         }, 3000)
