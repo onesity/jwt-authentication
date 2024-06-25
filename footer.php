@@ -35,6 +35,7 @@
             width: 100%;
             box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
             height: 100px;
+               box-shadow: rgba(0, 0, 0, 0.9) 0px 5px 15px;
             /* Optional: add a shadow for better separation */
         }
 

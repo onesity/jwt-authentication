@@ -1,7 +1,6 @@
 <?php
 include('header.php');
-require_once('lib.php');
-
+// require_once('lib.php');
 
 ?>
 <!DOCTYPE html>
@@ -11,135 +10,89 @@ require_once('lib.php');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Category Form</title>
+
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+    </script>
+
+    <link rel="stylesheet" href="page_style.css">
     <style>
-    .container {
-        width: 100%;
-        margin: 20px auto;
-    }
+        .container {
+            width: 100%;
+            margin: 20px auto;
+        }
 
-    body {
-        font-family: Arial, sans-serif;
-    }
+        body {
+            font-family: Arial, sans-serif;
+        }
 
-    .form-container {
-        width: 500px;
-        margin: 50px auto;
-        border: 1px solid black;
-        padding: 20px 20px;
-    }
+        .form-container {
+            width: 500px;
+            margin: 50px auto;
+            border: 1px solid black;
+            padding: 20px 20px;
+        }
 
-    .form-group {
-        margin-bottom: 15px;
-    }
+        .form-group {
+            margin-bottom: 15px;
+        }
 
-    label {
-        display: block;
-        margin-bottom: 5px;
-        margin-top: 20px;
-    }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            margin-top: 20px;
+        }
 
-    input[type="text"] {
-        width: 100%;
-        padding: 8px;
-        box-sizing: border-box;
-    }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
 
-    .submit-btn {
-        display: flex;
-        justify-content: flex-end;
-    }
+        .submit-btn {
+            display: flex;
+            justify-content: flex-end;
+        }
 
-    .submit-btn button {
-        padding: 10px 20px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        cursor: pointer;
-    }
+        .submit-btn button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
 
-    .submit-btn button:hover {
-        background-color: #45a049;
-    }
+        .submit-btn button:hover {
+            background-color: #45a049;
+        }
 
-    .error {
-        color: red;
-        margin-top: 10px;
-    }
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
 
-    #catgory_heading,
-    #create_category_btn {
-        /* margin-left: 2%; */
-    }
-
-    #catgory_heading {
-        margin-top: 30px;
-        margin-bottom: 30px;
-    }
-
-    .main-div {
-        display: flex;
-        /* background-color: red; */
-        /* height: 1000px; */
-    }
-
-    .left-div {
-        width: 16%;
-        background-color: blue;
-        margin-top: 2%;
-        margin-bottom: 2%;
-        height: auto;
-        /* margin-left: 1%; */
-        border-radius: 10px;
-        /* border: 1px solid black; */
-        background-color: whitesmoke;
-    }
-    
-    .right-div {
-        width: 81%;
-        margin-top: 2%;
-        margin-bottom: 2%;
-        margin-left: 3%;
-        margin-right: 1%;
-        /* border: 1px solid black; */
-        border-radius: 10px;
-        background-color: whitesmoke;
-
-    }
-
-    #hamburger_btn   {
-        margin-left: 97%;
-        /* margin-top: 2%; */
-        font-size: 25px;
-        background-color: blue;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        border-radius: 5px;
-        position: relative;
-    }
+        #catgory_heading {
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
     </style>
 </head>
 
 <body>
     <div class="main-div">
-        <?php 
-        sidenavbar();
-        
+        <?php
+        sidenavbar()
         ?>
-            <div class="right-div">
-
+        <div class="right-div">
+            <button id="hamburger_btn">&#x2716;</button>
             <div class="container">
                 <h2 id="catgory_heading">Categories </h2>
-                <button type="button" class="btn btn-primary" id='create_category_btn' data-bs-toggle="modal"
-                    data-bs-target="#exampleModal" data-bs-whatever="@mdo">Create new category</button>
+                <button type="button" class="btn btn-primary" id='create_category_btn' data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Create new category</button>
                 <table id="example" class="display" style="width:100%">
                     <thead>
                         <tr>
@@ -169,13 +122,13 @@ require_once('lib.php');
                                 $timemodified = date('Y-m-d', $record['timemodified']);
                             }
                             echo "<tr>
-                    <td>$sr</td>
-                    <td>$category_name</td>
-                    <td>$status</td>
-                    <td>$timecreated</td>
-                    <td>$timemodified</td>
-                    <td>Edit</td>
-                    </tr>";
+                            <td>$sr</td>
+                            <td>$category_name</td>
+                            <td>$status</td>
+                            <td>$timecreated</td>
+                            <td>$timemodified</td>
+                            <td>Edit</td>
+                            </tr>";
                             $total_record--;
                             $sr++;
                         }
@@ -186,8 +139,8 @@ require_once('lib.php');
                 </table>
             </div>
         </div>
-
     </div>
+
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -212,86 +165,60 @@ require_once('lib.php');
             </div>
         </div>
     </div>
-    
+
     <script>
         const form_div = document.querySelector('.modal-content');
         document.getElementById('submit_btn').addEventListener('click', function(event) {
-            
-        const categoryName = document.getElementById('categoryName').value.trim();
-        const errorMessage = document.getElementById('errorMessage');
-        errorMessage.textContent = '';
 
-        const alphanumericPattern = /^[a-zA-Z0-9]+$/;
-        const startsWithAlphabetPattern = /^[a-zA-Z]/;
+            const categoryName = document.getElementById('categoryName').value.trim();
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.textContent = '';
 
-        if (categoryName === '') {
-            errorMessage.textContent = 'Category name should not be empty.';
-        } else if (categoryName.length < 3) {
-            errorMessage.textContent = 'Category name should be at least 3 characters long.';
-        } else if (!alphanumericPattern.test(categoryName)) {
-            errorMessage.textContent = 'Category name should contain only alphanumeric values.';
-        } else if (!startsWithAlphabetPattern.test(categoryName)) {
-            errorMessage.textContent = 'Category name should start with an alphabet.';
-        } else {
-            var category_data = {
-                action: 'create_category',
-                category_name: categoryName
-            };
-            fetch('http://localhost/travel_booking_system/travel_booking_system/ajax.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(category_data)
-            }).then((res) => {
-                return res.json();
-            }).then((res) => {
-                if (res.success == true) {
-                    form_div.innerHTML = "<h2 id='success_msg'>" + res.msg + "</h2>";
-                    const success_msg = document.getElementById('success_msg');
-                    success_msg.style.margin = '30px';
-                    setTimeout(() => {
-                        window.location.href =
-                        "http://localhost/travel_booking_system/travel_booking_system/category.php";
-                    }, 3000)
-                } else {
-                    errorMessage.innerHTML = res.msg;
-                }
-            })
-        }
-    });
-    $(document).ready(function() {
-        $('#example').DataTable();
-    });
-    window.addEventListener('load',()=>{
-        const hamburger_btn=document.getElementById('hamburger_btn');
-        const left_div=document.querySelector('.left-div');
-        const right_div=document.querySelector('.right-div');
-        let toggle=0;
-        hamburger_btn.addEventListener('click',()=>{
-            if(toggle==0){
-                left_div.style.width='0px';
-                left_div.style.transition='1s';
-                right_div.style.width='99%';
-                right_div.style.marginLeft='1%';
-                // hamburger_btn.style.marginLeft='10%';
-                // right_div.style.marginLeft='0';
-                hamburger_btn.innerHTML='&#9776'
-                toggle=1;
-            }else{
-                left_div.style.width='16%';
-                left_div.style.transition='1s';
-                right_div.style.marginLeft='3%';
-                right_div.style.width='81%';
-                hamburger_btn.innerHTML='&#x2716;'
-                toggle=0;
+            const alphanumericPattern = /^[a-zA-Z0-9]+$/;
+            const startsWithAlphabetPattern = /^[a-zA-Z]/;
+
+            if (categoryName === '') {
+                errorMessage.textContent = 'Category name should not be empty.';
+            } else if (categoryName.length < 3) {
+                errorMessage.textContent = 'Category name should be at least 3 characters long.';
+            } else if (!alphanumericPattern.test(categoryName)) {
+                errorMessage.textContent = 'Category name should contain only alphanumeric values.';
+            } else if (!startsWithAlphabetPattern.test(categoryName)) {
+                errorMessage.textContent = 'Category name should start with an alphabet.';
+            } else {
+                var category_data = {
+                    action: 'create_category',
+                    category_name: categoryName
+                };
+                fetch('http://localhost/travel_booking_system/travel_booking_system/ajax.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(category_data)
+                }).then((res) => {
+                    return res.json();
+                }).then((res) => {
+                    if (res.success == true) {
+                        form_div.innerHTML = "<h2 id='success_msg'>" + res.msg + "</h2>";
+                        const success_msg = document.getElementById('success_msg');
+                        success_msg.style.margin = '30px';
+                        setTimeout(() => {
+                            window.location.href =
+                                "http://localhost/travel_booking_system/travel_booking_system/category.php";
+                        }, 3000)
+                    } else {
+                        errorMessage.innerHTML = res.msg;
+                    }
+                })
             }
-        })
-    
-    })
+        });
 
+        $(document).ready(function() {
+            $('#example').DataTable();
+        });
     </script>
-
-
-
 </body>
+<?php
+include('footer.php');
+?>

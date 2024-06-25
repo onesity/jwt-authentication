@@ -5,7 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile Popup</title>
-    <link rel="stylesheet" href="styles.css">
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+    </script>
+    
+   
     <style>
         body {
             margin: 0;
@@ -20,6 +30,10 @@
             padding: 10px 20px;
             background-color: white;
             color: black;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            position:relative;
+            width: 100%;
+            
         }
 
         .logo img {
@@ -73,14 +87,6 @@
             background-color: lightblue;
             color: #fff;
         }
-
-        /* .login-btn:hover {
-            background-color: #777;
-        }
-
-        .signup-btn:hover {
-            background-color: #0056b3;
-        } */
 
         .profile {
             position: relative;

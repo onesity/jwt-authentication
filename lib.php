@@ -60,9 +60,78 @@ function send_email($email,$subject,$body,)
 }
 
 function sidenavbar(){
-    echo '<div class="left-div">
-                <button  id="hamburger_btn">&#x2716;</button>
+    echo '
+      <div class="left-div">
+      <h3 id="navigation_heading">Navigation</h3>
+            <table id="nav_table">
+                <tr id=\'table_row_home\' selected="true">
+                    <td id="row_data" >
+                    <i class="bi bi-house"></i><a href="index.php" id="nav_link">Home</a>
+                    </td>
+                </tr>
+                <tr id=\'table_row_category\' selected="false">
+                    <td id="row_data">
+                    <i class="bi bi-house"></i><a href="category.php" id="nav_link">Category</a>
+                    </td>
+                </tr>
+                <tr id=\'table_row_trip\' selected="false">
+                    <td id="row_data">
+                    <i class="bi bi-house"></i><a href="locations.php" id="nav_link">Trips</a>
+                    </td>
+                </tr>
+                <tr id=\'table_row_bookings\' selected="false">
+                    <td id="row_data">
+                    <i class="bi bi-house"></i><a href="#" id="nav_link">Bookings</a>
+                    </td>
+                </tr>
+                <tr id=\'table_row_payments\' selected="false">
+                    <td id="row_data">
+                    <i class="bi bi-house"></i><a href="#" id="nav_link">Payments</a>
+                    </td>
+                </tr>
+            </table>
         </div>
+
+        <script>
+        window.addEventListener(\'load\', () => {
+        const hamburger_btn = document.getElementById(\'hamburger_btn\');
+        const left_div = document.querySelector(\'.left-div\');
+            const right_div = document.querySelector(\'.right-div\');
+            let toggle = 0;
+            hamburger_btn.addEventListener(\'click\', () => {
+                if (toggle == 0) {
+                    left_div.style.width = \'0\';
+                    left_div.style.transition = \'1s\';
+                    right_div.style.width = \'100%\';
+                    right_div.style.marginLeft = \'0\';
+                    // hamburger_btn.style.marginLeft=\'10%\';
+                    // right_div.style.marginLeft= \'0\';
+                    hamburger_btn.innerHTML = \'&#9776\'
+                    toggle = 1;
+                } else {
+                    left_div.style.width = \'16%\';
+                    left_div.style.transition = "1s";
+                    right_div.style.marginLeft = \'1%\';
+                    right_div.style.width = \'81%\';
+                    hamburger_btn.innerHTML = \'&#x2716;\'
+                    toggle = 0;
+                }
+            })
+
+        })
+        const nav_table=document.querySelectorAll("tr");
+        nav_table.forEach((e)=>{
+            let selected =document.querySelector(\'[selected="true"]\')
+            selected.style.backgroundColor=\'lightblue\';
+            e.addEventListener(\'click\',(s)=>{
+                let selected =document.querySelector(\'[selected="true"]\')
+                selected.style.backgroundColor=\'white\';
+                selected.setAttribute(\'selected\',false);
+                e.style.backgroundColor=\'lightblue\';
+                e.setAttribute(\'selected\',true);
+            })
+        })
+        </script>
         ';
 }
 
