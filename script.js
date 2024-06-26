@@ -52,7 +52,7 @@ window.addEventListener('load', () => {
         var data = { username: username.value, email: email.value, password: password.value, action: 'signup' };
         if (Object.keys(errors).length == 0) {
 
-            fetch('http://localhost/jwt_authentication/ajax.php', {
+            fetch('/ajax.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

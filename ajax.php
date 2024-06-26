@@ -211,3 +211,16 @@ if($action=='create_category'){
     echo json_encode($response);
     exit;
 }
+
+if($action=='delete_travel'){
+    $id=$data['id'];
+    $query="delete from travel where id='$id'";
+    $res=mysqli_query($conn,$query);
+    if($res){
+        $response = ['success' => true, 'msg' => 'Deleted Successfully!'];
+    }else{
+        $response = ['success' => false, 'msg' => 'Something went wrong'];
+    }
+    echo json_encode($response);
+    exit;
+}

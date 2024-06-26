@@ -27,14 +27,14 @@ include('header.php');
 
         .right-div {
             flex: 1;
-            padding: 20px;
             box-sizing: border-box;
         }
 
         .form-group {
             margin-bottom: 15px;
+            margin: 20px;
         }
-
+        
         label {
             display: block;
             margin-bottom: 5px;
@@ -47,17 +47,26 @@ include('header.php');
             padding: 8px;
             box-sizing: border-box;
         }
-
+        
         #submit_btn {
+            width: 180px;
             padding: 10px 20px;
             background-color: #007BFF;
             color: #fff;
             border: none;
             cursor: pointer;
+            /* margin: 20px; */
+            margin-left: 20px;
+            margin-bottom: 20px;
         }
 
+        
         #submit_btn:hover {
             background-color: #0056b3;
+        }
+        #page_heading{
+            margin-left: 20px;
+            margin: 20px;
         }
     </style>
 </head>
@@ -68,7 +77,7 @@ include('header.php');
         <div class="right-div">
             <button id="hamburger_btn">&#x2716;</button>
 
-            <h1>Trip Details Form</h1>
+            <h1 id="page_heading">Trip Details Form</h1>
             <form id="tripForm" method="POST" action="#" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="tripTitle">Trip Title</label>
@@ -184,17 +193,21 @@ if(isset($_POST['submit'])){
     $title=$_POST['title'];
     $categoryid=$_POST['category'];
     $description=$_POST['description'];
-    $image='fsdfsdfsdfsdfs';
     $price=$_POST['price'];
     $days=$_POST['days'];
+    $filename=$_FILES['images'];
+    $baseUrl='images/';
+    $targetFilePath=$baseUrl.$filename['name'];
+    $upload_res=move_uploaded_file($_FILES['images']['tmp_name'],$targetFilePath);
+    $image=$targetFilePath;
     $timecreated=time();
     $status=1;
     $query="insert into travel(categoryid,title,description,image,price,days,status,timecreated) values('$categoryid','$title','$description','$image','$price','$days','$status','$timecreated')";
     $res=mysqli_query($conn,$query);
-    if($res){
-        echo "Travel added successfully!";
+    if($res==true){
+        success_modal('Travel Added Sucessfully!');
     }else{
-        echo $query;
+        success_modal('Failed! Something went wrong!');
     }
 }
 include('footer.php');

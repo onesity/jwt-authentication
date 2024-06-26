@@ -2,6 +2,7 @@
 
 require_once('vendor/autoload.php');
 $config = require_once('config.php');
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -22,7 +23,7 @@ function is_login()
     }
 }
 
-function send_email($email,$subject,$body,)
+function send_email($email, $subject, $body,)
 {
 
     // Load Composer's autoloader
@@ -48,7 +49,7 @@ function send_email($email,$subject,$body,)
         // Content
         $mail->isHTML(true);                                  // Set email format to HTML
         $mail->Subject = $subject;
-        $mail->Body    =$body;
+        $mail->Body    = $body;
         $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
         $mail->send();
@@ -56,10 +57,10 @@ function send_email($email,$subject,$body,)
     } catch (Exception $e) {
         echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
     }
-   
 }
 
-function sidenavbar(){
+function sidenavbar()
+{
     echo '
       <div class="left-div">
       <h3 id="navigation_heading">Navigation</h3>
@@ -138,6 +139,104 @@ function sidenavbar(){
 
 
 
-   
+function success_modal($msg)
+{
+    echo '
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
 
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+}
 
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    text-align: center;
+    border-radius: 10px;
+    position: relative;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+</style>
+
+    <!-- Modal Structure -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Success!</h2>
+            <p>' . $msg . '</p>
+        </div>
+    </div>
+
+    <script>
+    var modal = document.getElementById(\'successModal\');
+    modal.style.display = \'flex\';
+
+    // Close modal after 3 seconds and reload the page
+    setTimeout(function() {
+        modal.style.display = \'none\';
+    window.location.href=\'locations.php\';
+    }, 3000);
+
+document.querySelector(\'.close\').addEventListener(\'click\', function() {
+    var modal = document.getElementById(\'successModal\');
+    modal.style.display = \'none\';
+});
+
+// Close the modal if the user clicks anywhere outside of the modal content
+window.onclick = function(event) {
+    var modal = document.getElementById(\'successModal\');
+    if (event.target == modal) {
+        modal.style.display = \'none\';
+    }
+}
+</script>
+';
+}
