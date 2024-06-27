@@ -9,12 +9,30 @@ include('header.php');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trip Details Form</title>
+
     <link rel="stylesheet" href="page_style.css">
     <style>
+        .container {
+            width: 100%;
+            margin: 20px auto;
+        }
+
+        .form-container {
+            width: 500px;
+            margin: 50px auto;
+            border: 1px solid black;
+            padding: 20px 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
         #add_location_btn_link {
             text-decoration: none;
             color: white;
         }
+
 
         #travel_image {
             width: 60%;
@@ -73,6 +91,12 @@ include('header.php');
             margin-top: 35px;
             margin-left: 5%;
         }
+
+        #deleted_success_msg {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 22%;
+        }
     </style>
 
 </head>
@@ -83,11 +107,10 @@ include('header.php');
         sidenavbar()
         ?>
         <div class="right-div">
-
             <button id="hamburger_btn">&#x2716;</button>
             <div class="container">
-                <h2 id="catgory_heading">Add new trip </h2>
-                <button type="button" class="btn btn-primary" id='create_category_btn'>
+                <h2 id="page_heading">Add new trip </h2>
+                <button type="button" class="btn btn-primary" id='create_btn'>
                     <a href="add_location.php" id="add_location_btn_link">Add new trip</a>
                 </button>
                 <table id="example" class="display" style="width:100%">
@@ -96,6 +119,7 @@ include('header.php');
                             <th>Sr</th>
                             <th>Image</th>
                             <th>Title</th>
+                            <th>Category</th>
                             <th>Description</th>
                             <th>Price</th>
                             <th>Days</th>
@@ -108,11 +132,13 @@ include('header.php');
                     </thead>
                     <tbody>
                         <?php
+
                         $query = "select * from travel order by id desc";
                         $res = mysqli_query($conn, $query);
                         $total_record = mysqli_num_rows($res);
                         $sr = 1;
                         while ($total_record != 0) {
+
                             $record = mysqli_fetch_assoc($res);
                             $id = $record['id'];
                             $title = $record['title'];
@@ -121,31 +147,50 @@ include('header.php');
                             $days = $record['days'];
                             $image = $record['image'];
                             $status = $record['status'];
+                            $categoryid = $record['categoryid'];
                             $timecreated = date('Y-m-d', $record['timecreated']);
+
                             if ($record['timemodified'] == 0) {
                                 $timemodified = 'NA';
                             } else {
                                 $timemodified = date('Y-m-d', $record['timemodified']);
                             }
+
+                            $category_res = mysqli_query($conn, "select * from category where id='$categoryid'");
+                            $category_arr = mysqli_fetch_assoc($category_res);
+                            $category_name = $category_arr['name'];
+
                             echo "<tr>
-                    <td>$sr</td>
-                    <td><img src='$image' id='travel_image'>  </td>
-                    <td>$title</td>
-                    <td>$description</td>
-                    <td>$price</td>
-                    <td>$days</td>
-                    <td>$status</td>
-                    <td>$timecreated</td>
-                    <td>$timemodified</td>
-                    <td><a href='add_location.php'>Edit</a> <a id='delete_btn' data-id='$id'>Delete</a> <a data-id='$id'>Active</a></td>
-                    </tr>";
+                            <td>$sr</td>
+                            <td><img src='$image' id='travel_image'>  </td>
+                            <td>$title</td>
+                            <td>$category_name</td>
+                            <td>$description</td>
+                            <td>$price</td>
+                            <td>$days</td>
+                            <td>$status</td>
+                            <td>$timecreated</td>
+                            <td>$timemodified</td>
+                            <td>
+                            <a href='add_location.php?id=$id' title='Edit'><i class='bi bi-pencil-square'></i></a>
+                            <a id='delete_btn' data-id='$id' data-action='delete_travel' title='Delete'><i class='bi bi-trash'></i></a>
+                            ";
+                            if ($status == 0) {
+                                echo "<a data-id='$id' id='suspend_btn' data-action='suspend_travel' title='Active'><i class='bi bi-eye'></i></a>
+                            </td>
+                            </tr>";
+                            } else {
+                                echo "<a data-id='$id' id='suspend_btn' data-action='suspend_travel' title='Suspended'><i class='bi bi-eye-slash'></i></a>
+                            </td>
+                            </tr>";
+                            }
+
                             $total_record--;
                             $sr++;
                         }
+
                         ?>
-
                     </tbody>
-
                 </table>
             </div>
         </div>
@@ -162,14 +207,9 @@ include('header.php');
         </div>
     </div>
     <script>
-        $(document).ready(function() {
-            $('#example').DataTable();
-        });
-        // delete_btn.forEach((e) => {
-        //     e.addEventListener('click', () => {})
-        // })
         window.addEventListener('load', () => {
             const delete_btn_group = document.querySelectorAll('#delete_btn');
+            const suspend_btn_arr = document.querySelectorAll('#suspend_btn');
             const deleteModal = document.querySelector('#deleteModal');
             const delete_modal_content = document.querySelector('.delete_modal');
             const delete_btn = document.querySelector('#delete_btn');
@@ -181,26 +221,20 @@ include('header.php');
                 e.addEventListener('click', (s) => {
                     openModal(deleteModal);
                     continue_btn.setAttribute('data-id', e.getAttribute('data-id'));
-            
-                    continue_btn.addEventListener('click', (s) => {
-                        const delete_id = e.getAttribute('data-id');
-                        const delete_data = {
-                            action: 'delete_travel',
-                            id: delete_id
-                        }
-                        fetch("ajax.php", {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(delete_data)
-                        }).then((response) => {
-                            return response.json;
-                        }).then((res) => {
-                            console.log(JSON.parse(res).msg);
-                            delete_modal_content.innerHTML='<h2>'+res.msg+'</h2>'
-                        })
-                    })
+                    continue_btn.setAttribute('data-action', e.getAttribute('data-action'));
+                    process_request(e);
+
+                })
+            })
+
+            suspend_btn_arr.forEach((e) => {
+                e.addEventListener('click', () => {
+                    openModal(deleteModal)
+                    openModal(deleteModal);
+                    continue_btn.setAttribute('data-id', e.getAttribute('data-id'));
+                    continue_btn.setAttribute('data-action', e.getAttribute('data-action'));
+                    process_request(e);
+
                 })
             })
 
@@ -218,6 +252,33 @@ include('header.php');
             function openModal(selector) {
                 selector.style.display = 'block';
             }
+
+            function process_request(e) {
+                continue_btn.addEventListener('click', (s) => {
+                    const delete_id = e.getAttribute('data-id');
+                    const data_action = e.getAttribute('data-action');
+
+                    const delete_data = {
+                        action: data_action,
+                        id: delete_id
+                    }
+                    fetch("ajax.php", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(delete_data)
+                    }).then((response) => {
+                        return response.json();
+                    }).then((res) => {
+                        delete_modal_content.innerHTML = '<h4 id="deleted_success_msg">' + res.msg + '</h4>';
+                        setTimeout(() => {
+                            window.location.href = "http://localhost/travel_booking_system/travel_booking_system/locations.php";
+                        }, 3000)
+                    })
+                })
+            }
+
         })
     </script>
 

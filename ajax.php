@@ -151,14 +151,14 @@ if ($action == 'reset_password') {
 if ($action == 'verify_otp') {
     $otp = $_SESSION['otp'];
     $otp_expiration_time = $_SESSION['otp_exipration_time'];
-    $_SESSION['is_otp_verified']=false;
+    $_SESSION['is_otp_verified'] = false;
     if (time() > $otp_expiration_time) {
         $response = ['success' => false, 'msg' => 'OTP is expired!'];
     } else {
         if ($otp == $data['otp']) {
             unset($_SESSION['otp']);
             unset($_SESSION['otp_exipration_time']);
-            $_SESSION['is_otp_verified']=true;
+            $_SESSION['is_otp_verified'] = true;
             $response = ['success' => true, 'msg' => 'OTP verified!'];
         } else {
             $response = ['success' => false, 'msg' => 'Incorrect OTP!'];
@@ -168,43 +168,43 @@ if ($action == 'verify_otp') {
     exit;
 }
 
-if($action=='upadte_password'){
+if ($action == 'upadte_password') {
 
-    $email=$_SESSION['email'];
-    $isOtpVerified=$_SESSION['is_otp_verified'];
-    if($isOtpVerified==true ){
-        $password=$data['password'];
-        $query="update user set password='$password' where email='$email'";
-        $res=mysqli_query($conn,$query);
-        if($res!=false){
+    $email = $_SESSION['email'];
+    $isOtpVerified = $_SESSION['is_otp_verified'];
+    if ($isOtpVerified == true) {
+        $password = $data['password'];
+        $query = "update user set password='$password' where email='$email'";
+        $res = mysqli_query($conn, $query);
+        if ($res != false) {
             unset($_SESSION['is_otp_verified']);
             unset($_SESSION['email']);
             unset($_SESSION['otp']);
 
             $response = ['success' => true, 'msg' => 'Password updated successfully!'];
-        }else{
+        } else {
             $response = ['success' => false, 'msg' => 'Email is not found!'];
         }
-    }else{
+    } else {
         $response = ['success' => false, 'msg' => 'Please verify OTP!'];
     }
     echo json_encode($response);
     exit;
 }
 
-if($action=='create_category'){
-    $name=$data['category_name'];
-    $query="select * from category where name='$name'";
-    $res=mysqli_query($conn,$query);
-    if(mysqli_num_rows($res)!=0){
+if ($action == 'create_category') {
+    $name = $data['category_name'];
+    $query = "select * from category where name='$name'";
+    $res = mysqli_query($conn, $query);
+    if (mysqli_num_rows($res) != 0) {
         $response = ['success' => false, 'msg' => 'Catgory already exists!'];
-    }else{
-        $timecreated=time();
-        $status=1;
-        $new_query="insert into category(name,status,timecreated) values('$name','$status','$timecreated')";
-        if(mysqli_query($conn,$new_query)!=false){
+    } else {
+        $timecreated = time();
+        $status = 1;
+        $new_query = "insert into category(name,status,timecreated) values('$name','$status','$timecreated')";
+        if (mysqli_query($conn, $new_query) != false) {
             $response = ['success' => true, 'msg' => 'Category created successfully!'];
-        }else{
+        } else {
             $response = ['success' => false, 'msg' => 'Something went wrong!'];
         }
     }
@@ -212,13 +212,35 @@ if($action=='create_category'){
     exit;
 }
 
-if($action=='delete_travel'){
-    $id=$data['id'];
-    $query="delete from travel where id='$id'";
-    $res=mysqli_query($conn,$query);
-    if($res){
+if ($action == 'delete_travel') {
+    $id = $data['id'];
+    $query = "delete from travel where id='$id'";
+    $res = mysqli_query($conn, $query);
+    if ($res) {
         $response = ['success' => true, 'msg' => 'Deleted Successfully!'];
-    }else{
+    } else {
+        $response = ['success' => false, 'msg' => 'Something went wrong'];
+    }
+    echo json_encode($response);
+    exit;
+}
+
+if ($action == 'suspend_travel') {
+    $id = $data['id'];
+    $base_query = "select * from travel where id='$id'";
+    $res = mysqli_query($conn, $base_query);
+    $result = mysqli_fetch_assoc($res);
+    if ($result['status'] == 0) {
+        $query = "update travel set status='1' where id='$id'";
+        $msg = 'Suspended Successfully!';
+    } else {
+        $query = "update travel set status='0' where id='$id'";
+        $msg = 'Activate Successfully!';
+    }
+    $res = mysqli_query($conn, $query);
+    if ($res) {
+        $response = ['success' => true, 'msg' => $msg];
+    } else {
         $response = ['success' => false, 'msg' => 'Something went wrong'];
     }
     echo json_encode($response);

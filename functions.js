@@ -122,3 +122,11 @@ export function validatePassword(password) {
 
     return { status: true, message: "Password is valid." };
 }
+
+export function closeModal(selector) {
+    selector.style.display = 'none';
+}
+
+export function openModal(selector) {
+    selector.style.display = 'block';
+}

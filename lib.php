@@ -44,10 +44,10 @@ function send_email($email, $subject, $body,)
 
         // Recipients
         $mail->setFrom($email);
-        $mail->addAddress($email);     // Add a recipient
+        $mail->addAddress($email);    
 
         // Content
-        $mail->isHTML(true);                                  // Set email format to HTML
+        $mail->isHTML(true);                          
         $mail->Subject = $subject;
         $mail->Body    = $body;
         $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';

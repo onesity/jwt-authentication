@@ -75,11 +75,6 @@ include('header.php');
             color: red;
             margin-top: 10px;
         }
-
-        #catgory_heading {
-            margin-top: 30px;
-            margin-bottom: 30px;
-        }
     </style>
 </head>
 
@@ -91,8 +86,8 @@ include('header.php');
         <div class="right-div">
             <button id="hamburger_btn">&#x2716;</button>
             <div class="container">
-                <h2 id="catgory_heading">Categories </h2>
-                <button type="button" class="btn btn-primary" id='create_category_btn' data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Create new category</button>
+                <h2 id="page_heading">Categories </h2>
+                <button type="button" class="btn btn-primary" id='create_btn' data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Create new category</button>
                 <table id="example" class="display" style="width:100%">
                     <thead>
                         <tr>
@@ -127,7 +122,11 @@ include('header.php');
                             <td>$status</td>
                             <td>$timecreated</td>
                             <td>$timemodified</td>
-                            <td>Edit</td>
+                            <td>
+                            <a href='add_location.php'><i class='bi bi-pencil-square'></i></a>
+                             <a id='delete_btn' data-id=''><i class='bi bi-trash'></i></a>
+                             <a data-id=''><i class='bi bi-eye'></i></a>
+                            </td>
                             </tr>";
                             $total_record--;
                             $sr++;
@@ -214,9 +213,7 @@ include('header.php');
             }
         });
 
-        $(document).ready(function() {
-            $('#example').DataTable();
-        });
+
     </script>
 </body>
 <?php

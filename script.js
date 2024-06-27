@@ -52,7 +52,7 @@ window.addEventListener('load', () => {
         var data = { username: username.value, email: email.value, password: password.value, action: 'signup' };
         if (Object.keys(errors).length == 0) {
 
-            fetch('/ajax.php', {
+            fetch('http://localhost/travel_booking_system/travel_booking_system/ajax.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -97,7 +97,7 @@ window.addEventListener('load', () => {
                         } else {
                             otp_error.style.display = "none";
                             var otp_data = { action: 'otp_verification', otp: otp_field.value }
-                            fetch('http://localhost/jwt_authentication/ajax.php', {
+                            fetch('http://localhost/travel_booking_system/travel_booking_system/ajax.php', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json'
@@ -110,7 +110,7 @@ window.addEventListener('load', () => {
                                 if (response.success == true) {
                                     success_modal(response.msg);
                                     setTimeout(() => {
-                                        window.location.href = "http://localhost/jwt_authentication/login.php";
+                                        window.location.href = "http://localhost/travel_booking_system/travel_booking_system/login.php";
                                     }, 3000)
 
                                 } else {
@@ -123,7 +123,7 @@ window.addEventListener('load', () => {
                     })
                     resend_otp_btn.addEventListener('click', () => {
                         var resend_otp_data = { action: 'resend_otp' };
-                        fetch('http://localhost/jwt_authentication/ajax.php', {
+                        fetch('http://localhost/travel_booking_system/travel_booking_system/ajax.php', {
                             method: 'POST',
                             header: {
                                 'Content-Type': 'application/JSON'
